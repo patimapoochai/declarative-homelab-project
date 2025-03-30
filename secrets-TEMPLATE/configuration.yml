@@ -1,0 +1,16 @@
+## REPLACE THESE VALUES WITH THE ONES YOU WANT ##
+
+# private key you will use to unlock the public key
+# when running ansible
+ansible_private_key_password: "SOMEPASSWORD" 
+
+# the name of the user you're running ansible playbook from
+localhost_username: USERNAME
+
+# the name of the default, PRIVILEGED user on rocky linux host
+rocky_remote_user: USERNAME
+
+# k3s configurations
+k3s:
+  # the IP address of the k3s node running in "server" mode
+  k3s-server-ip: XX.XX.XX.XX

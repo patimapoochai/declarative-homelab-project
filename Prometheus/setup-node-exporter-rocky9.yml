@@ -1,0 +1,40 @@
+---
+- name: Setup Node Exporter agent on Rocky Linux 9
+  hosts: rocky
+  become: true
+  tasks:
+  - name: put node_exporter in right location
+    copy: 
+      src: node_exporter/node_exporter-1.9.0.linux-amd64/node_exporter
+      dest: /usr/sbin/node_exporter
+      owner: node_exporter
+      group: node_exporter
+      mode: "744"
+  - name: put .service and .socket into /etc/systemd/system
+    copy: 
+      src: "node_exporter/{{ item }}"
+      dest: /etc/systemd/system/{{ item }}
+    loop:
+    - node_exporter.service
+    - node_exporter.socket
+  - name: create node_exporter user
+    ansible.builtin.user:
+      name: node_exporter
+      shell: /sbin/nologin
+  - name: add node_exporter sys_config
+    copy:
+      src: node_exporter/sysconfig.node_exporter
+      dest: /etc/sysconfig/node_exporter
+  - name: create needed directories
+    file:
+      path: /var/lib/node_exporter/textfile_collector
+      state: directory
+      owner: node_exporter
+      group: node_exporter
+  - name: open firewall port 9100
+    ansible.posix.firewalld:
+      port: 9100/tcp
+      state: enabled
+      permanent: yes
+      immediate: yes
+    

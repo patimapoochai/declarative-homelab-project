@@ -1,0 +1,34 @@
+---
+- name: Setup Syncthing on Rocky Linux 9
+  hosts: rocky,&syncthing
+  become: true
+  tasks:
+  - name: create syncthing remote directory
+    file:
+      state: directory
+      path: /home/ansible/syncthing
+  - name: create the directory used for syncing
+    file:
+      state: directory
+      path: /home/ansible/syncthing/SyncDirectory
+  - name: upload compose file
+    ansible.builtin.copy:
+      src: compose.yml
+      dest: /home/ansible/syncthing/compose.yml
+  - name: run docker compose
+    community.docker.docker_compose_v2:
+      project_src: /home/ansible/syncthing
+      state: present
+- name: Change firewall
+  hosts: rocky,&syncthing
+  become: true
+  tasks:
+  - name: firewalld module dependencies
+    dnf:
+      name: python3-firewall
+      state: installed
+  - name: enable firewall ports
+    ansible.posix.firewalld:
+      port: 8384/tcp
+      permanent: true
+      state: enabled

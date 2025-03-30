@@ -1,0 +1,50 @@
+---
+- name: Create local SSH keys
+  hosts: localhost
+  vars_files:
+    - ../secrets/configuration.yml
+  tasks:
+  - name: create ssh key for managing ansible hosts
+    community.crypto.openssl_privatekey:
+      path: /home/{{ localhost_username }}/.ssh/ansible.key
+      passphrase: "{{ ansible_private_key_password }}"
+      cipher: auto
+      state: present
+  - name: create ssh pub key
+    community.crypto.openssl_publickey:
+      path: /home/{{ localhost_username }}/.ssh/ansible.pub
+      privatekey_path: /home/{{ localhost_username }}/.ssh/ansible.key
+      privatekey_passphrase: "{{ ansible_private_key_password }}"
+      format: OpenSSH
+      state: present
+  #- name: send ssh keys
+  #  debug:
+  #    msg: "{{ lookup('file', '/home/localstoat/.ssh/id_ed25519.pub') }}"
+- name: Setup ansible on hosts
+  hosts: rocky
+  vars_files:
+    - ../secrets/configuration.yml
+  become: true
+  remote_user: "{{ rocky_remote_user }}"
+  tasks:
+  # when running these tasks, you have to remove `private_key_file =` in ansible.cfg, as the hosts requires ssh password login, and using private_key_file will override password auth with private key auth
+  # also this part you want to add `-kK` arguments, because host machines should have passwords
+  - name: setup "ansible" user on managed hosts
+    user:
+      name: ansible
+      groups: wheel
+  - name: setup authorized key for "ansible" user
+    ansible.posix.authorized_key:
+      user: ansible
+      state: present
+      key: "{{ lookup('file', '/home/'+ localhost_username +'/.ssh/ansible.pub') }}"
+  - name: setup privilege escalation # ansible already in group wheel, no?
+    community.general.sudoers:
+      name: ansible-nopasswd
+      user: ansible
+      commands: ALL
+      nopassword: true
+  - name: make sure python is installed
+    dnf:
+      name: python3
+      state: installed

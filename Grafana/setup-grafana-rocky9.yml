@@ -1,0 +1,44 @@
+---
+# Setup Grafana to work with Prometheus with helm on Rocky Linux 9
+- name: Setup ansible playbook dependencies
+  hosts: rocky,&prometheus # using the prometheus group because they should be on the same machine
+  become: true
+  tasks:
+  - name: make sure pip is installed
+    dnf:
+      name: python3-pip
+      state: installed
+  - name: install yaml dependencies
+    ansible.builtin.pip:
+      name: PyYAML
+  - name: create grafana folder
+    file:
+      path: "/home/ansible/grafana"
+      state: directory
+      owner: ansible
+      group: ansible
+  - name: add directory for bind mount volumes
+    file:
+      path: "/home/ansible/grafana/data"
+      state: directory
+      owner: 472
+      group: 472 # from https://github.com/grafana/grafana/blob/bb881f38bbee238986220329317b60c7e98f7045/Dockerfile#L131
+- name: Setup prometheus with helm
+  hosts: rocky,&prometheus
+  tasks:
+  - name: create ./chart/ folder
+    file:
+      path: /home/ansible/grafana/chart/
+      state: directory
+  - name: remove stale chart files
+    shell: rm -r /home/ansible/grafana/chart/* # this fails if there's no file in the directory
+  - name: copy local chart to hosts
+    copy:
+      src: grafana-chart/
+      dest: /home/ansible/grafana/chart/
+  - name: install ansible helm repository
+    kubernetes.core.helm:
+      name: grafana-1
+      # helm module will look for the local chart directory on the managed machine, not from the controller
+      chart_ref: "./grafana/chart"
+      release_namespace: default

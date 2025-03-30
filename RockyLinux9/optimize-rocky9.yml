@@ -1,0 +1,7 @@
+---
+- name: Optimization for Rocky Linux 9
+  hosts: rocky
+  become: true
+  tasks:
+  - name: Set tuned to "balanced-battery"
+    command: tuned-adm profile balanced-battery

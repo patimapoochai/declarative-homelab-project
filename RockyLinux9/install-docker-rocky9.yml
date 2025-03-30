@@ -1,0 +1,48 @@
+---
+- name: Install docker
+  hosts: rocky
+  become: true
+  tasks:
+  # just follow this: https://docs.docker.com/engine/install/rhel/
+  - name: remove old versions of docker
+    dnf:
+      name:
+      - docker 
+      - docker-client 
+      - docker-client-latest 
+      - docker-common 
+      - docker-latest 
+      - docker-latest-logrotate 
+      - docker-logrotate 
+      - docker-engine 
+      - podman 
+      - runc
+      state: absent
+  - name: Docker repository requirements
+    dnf:
+      name: dnf-plugins-core
+      state: installed
+  - name: setup docker repos
+    # this will have to change when rhel 10 comes out i think
+    command: dnf config-manager --add-repo https://download.docker.com/linux/rhel/docker-ce.repo
+    args:
+      creates: /etc/yum.repos.d/docker-ce.repo
+  - name: install docker engine
+    dnf:
+      name:
+      - docker-ce
+      - docker-ce-cli 
+      - containerd.io 
+      - docker-buildx-plugin 
+      - docker-compose-plugin
+      state: latest
+  - name: start and enable docker
+    service:
+      name: docker
+      state: started
+      enabled: yes
+  - name: add ansible user to the docker group?
+    user:
+      name: ansible
+      append: yes
+      groups: docker

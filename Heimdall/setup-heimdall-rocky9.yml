@@ -1,0 +1,42 @@
+---
+- name: Setup heimdall on Rocky Linux 9
+  hosts: rocky,&heimdall
+  become: true
+  tasks:
+  - name: install pip
+    dnf:
+      name: python3-pip
+      state: installed
+  - name: install necessary python libraries
+    ansible.builtin.pip:
+      name:
+      - kubernetes
+      - PyYAML
+      - jsonpatch
+  - name: open firewall ports
+    firewalld:
+      port: 30009/tcp
+      state: enabled
+      permanent: yes
+      immediate: yes
+- name: non-root tasks
+  hosts: rocky,&heimdall
+  tasks:
+  - name: create heimdall directory on managed hosts
+    file:
+      path: "{{ item }}"
+      state: directory
+    loop:
+    - /home/ansible/heimdall
+    - /home/ansible/heimdall/chart
+    - /home/ansible/heimdall/data
+  - name: sync helm chart to host
+    ansible.posix.synchronize:
+      src: heimdall-chart/
+      dest: /home/ansible/heimdall/chart
+  - name: install heimdall helm repo
+    kubernetes.core.helm:
+      name: heimdall-1
+      # helm module will look for the local chart directory on the managed machine, not from the controller
+      chart_ref: "./heimdall/chart"
+      release_namespace: default

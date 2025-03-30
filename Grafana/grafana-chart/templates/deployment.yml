@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: grafana
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grafana
+  template:
+    metadata:
+      labels:
+        app: grafana
+    spec:
+      containers:
+      - name: {{ .Release.Name }}
+        image: {{ .Values.image.repository }}/grafana-oss:{{ .Values.image.tag }}
+        ports:
+        - containerPort: 3000
+        volumeMounts:
+        - mountPath: /var/lib/grafana
+          name: grafana-data
+      volumes:
+      - name: grafana-data
+        persistentVolumeClaim:
+          claimName: {{ .Release.Name }}-data

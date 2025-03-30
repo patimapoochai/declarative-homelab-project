@@ -1,0 +1,37 @@
+---
+- name: Setup Nextcloud AIO on Rocky Linux 9
+  hosts: rocky,&nextcloud
+  tasks:
+  - name: create nextcloud remote directory
+    file:
+      state: directory
+      path: /home/ansible/nextcloud
+  - name: upload compose file
+    ansible.builtin.copy:
+      src: compose.yml
+      dest: /home/ansible/nextcloud/compose.yml
+  - name: run docker compose
+    community.docker.docker_compose_v2:
+      project_src: /home/ansible/nextcloud
+      state: present
+- name: Change firewall
+  hosts: rocky,&nextcloud
+  become: true
+  tasks:
+  - name: firewalld module dependencies
+    dnf:
+      name: python3-firewall
+      state: installed
+  - name: enable firewall ports
+    ansible.posix.firewalld:
+      port: 8080/tcp
+      permanent: true
+      state: enabled
+  - name: enable https
+    ansible.posix.firewalld:
+      service: "{{ item }}"
+      permanent: true
+      state: enabled
+    loop:
+    - http
+    - https

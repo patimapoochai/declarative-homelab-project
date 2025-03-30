@@ -1,0 +1,56 @@
+---
+- name: Localhost prereqs
+  hosts: localhost
+  vars_files:
+  - ../secrets/configuration.yml
+  tasks:
+  - name: grab ssh pub key
+    command: cat /home/{{ localhost_username }}/.ssh/ansible.pub
+    register: pubkey
+
+- name: k3s server prereqs
+  hosts: rocky,&k3s
+  become: true
+  tasks:
+  - name: grab ssh pub key
+    command: cat /var/lib/rancher/k3s/server/token
+    register: k3s_token
+- name: Setup NixOS host running k3s and prometheus node exporter
+  hosts: nixos,&k3s
+  become: true
+  vars_files:
+  - ../secrets/configuration.yml
+  tasks:
+  # TODO: write tasks to setup nixos from fresh install, this play assumes ansible ping works
+  - name: sync config directory to /etc/nix
+    ansible.posix.synchronize:
+      src: Configuration/
+      dest: /etc/nixos/
+  # get the variable pubkey from localhost between plays
+  # from https://stackoverflow.com/questions/33896847/how-do-i-register-a-variable-and-persist-it-between-plays-targeted-on-different
+  #- debug:
+  #    var: hostvars['localhost']['pubkey']['stdout']
+  - name: add ssh key to known_hosts in ansible-managed-setup module
+    lineinfile:
+      path: /etc/nixos/nixosModules/ansible-managed-setup.nix
+      regexp: "openssh.authorizedKeys.keys = " # if you do `keys = [` here it will throw unterminated set character
+      line: '    openssh.authorizedKeys.keys = ["{{ hostvars.localhost.pubkey.stdout }}"];'
+  - name: set k3s token and ip address of the server node
+    lineinfile:
+      path: /etc/nixos/nixosModules/k3s.nix
+      regex: "{{ item.regex }}"
+      line: "{{ item.line }}"
+    loop:
+    - { regex: "token =", line: '    token = "{{ hostvars.rocky1.k3s_token.stdout }}";'}
+    - { regex: "serverAddr =", line: '    serverAddr = "https://{{ hostvars.rocky1.ansible_host }}:6443";'}
+  - name: test the configuration
+    command: nixos-rebuild dry-activate
+  - name: apply the configuration
+    shell: nixos-rebuild switch
+    register: switch_result
+  - name:
+    debug:
+      var: "{{ item }}"
+    loop:
+    - switch_result['stderr_lines']
+    - switch_result['stdout_lines']

@@ -1,0 +1,27 @@
+[rocky]
+rocky1 ansible_host=10.0.0.45
+
+[nixos]
+nixos1 ansible_host=10.0.0.50
+
+[nextcloud]
+rocky1
+
+[syncthing]
+rocky1
+
+[forgejo]
+rocky1
+
+[heimdall]
+rocky1
+
+[prometheus]
+rocky1
+
+[grafana]
+rocky1
+
+[k3s]
+rocky1
+nixos1

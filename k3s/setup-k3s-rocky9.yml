@@ -1,0 +1,41 @@
+---
+- name: Install k3s on Rocky Linux 9 Hosts
+  hosts: rocky,&k3s
+  become: true
+  tasks:
+  # firewalld preamble
+  - name: make sure firewalld is there
+    dnf:
+      name: firewalld
+      state: installed
+  - name: makesure ssh is allowed
+    firewalld:
+      service: ssh
+      state: enabled
+      permanent: true
+  - name: allow 6443/tcp port
+    ansible.posix.firewalld:
+      port: 6443/tcp
+      permanent: true
+      state: enabled
+  - name: add source 10.42.0.0/16 to zone "trusted" for pods
+    ansible.posix.firewalld:
+      source: 10.42.0.0/16
+      zone: trusted
+      state: enabled
+  - name: add source 10.43.0.0/16 to zone "trusted" for services
+    ansible.posix.firewalld:
+      source: 10.43.0.0/16
+      zone: trusted
+      state: enabled
+    notify: restart_firewalld
+  - name: install script
+    shell: curl -sfL https://get.k3s.io | sh -
+    args:
+      creates: /etc/rancher/k3s/k3s.yaml
+
+  handlers:
+  - name: restart_firewalld
+    ansible.builtin.service:
+      name: firewalld
+      state: reloaded

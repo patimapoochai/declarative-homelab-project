@@ -1,0 +1,22 @@
+---
+- name: Setup localhost
+  hosts: localhost
+  vars:
+    helm_file: "helm-v3.17.1-linux-amd64.tar.gz"
+  tasks:
+  - file: 
+      path: helm-files
+      state: directory
+  - name: unpack helm
+    ansible.builtin.unarchive:
+      src: "{{ helm_file }}"
+      dest: helm-files
+- name: Install helm on Rocky Linux 9 hosts
+  hosts: rocky,&k3s
+  become: true
+  tasks:
+  - name: put helm in /usr/local/bin/
+    copy:
+      src: helm-files/linux-amd64/helm
+      dest: /usr/local/bin/
+      mode: '755'
