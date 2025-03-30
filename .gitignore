@@ -1,2 +1,3 @@
 secrets/
 k3s/helm-files/*
+!k3s/helm-files/
