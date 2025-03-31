@@ -1,6 +1,6 @@
 # Building a declarative home lab using k3s, Ansible, Helm on NixOS and Rocky Linux
 ## What is this project?
-This is the infrastructure code to build my home lab for running services like Prometheus, Grafana, Nextcloud, and more on k3s and Docker. 
+This is the infrastructure code to build my home lab for running services like Prometheus, Grafana, Nextcloud, and more on k3s and Docker. View the full details of this project in [my blog post](https://dev.to/patimapoochai/building-a-declarative-home-lab-using-k3s-ansible-helm-on-nixos-and-rocky-linux-21l5).
 
 ## How are the services deployed?
 This project is meant to be deployed to two or more hosts with one host running Rocky Linux 9 and one host running NixOS.
