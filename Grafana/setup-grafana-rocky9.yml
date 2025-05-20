@@ -19,23 +19,28 @@
       group: ansible
   - name: add directory for bind mount volumes
     file:
-      path: "/home/ansible/grafana/data"
+      path: "{{ item }}"
       state: directory
       owner: 472
       group: 472 # from https://github.com/grafana/grafana/blob/bb881f38bbee238986220329317b60c7e98f7045/Dockerfile#L131
+    loop:
+      - "/home/ansible/grafana/data"
+      - "/home/ansible/grafana/config"
 - name: Setup prometheus with helm
   hosts: rocky,&prometheus
+  become: true
   tasks:
   - name: create ./chart/ folder
     file:
       path: /home/ansible/grafana/chart/
       state: directory
-  - name: remove stale chart files
-    shell: rm -r /home/ansible/grafana/chart/* # this fails if there's no file in the directory
   - name: copy local chart to hosts
-    copy:
+    ansible.posix.synchronize:
       src: grafana-chart/
       dest: /home/ansible/grafana/chart/
+  - ansible.posix.synchronize:
+      src: config/
+      dest: /home/ansible/grafana/config/
   - name: install ansible helm repository
     kubernetes.core.helm:
       name: grafana-1

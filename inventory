@@ -25,3 +25,6 @@ rocky1
 [k3s]
 rocky1
 nixos1
+
+[IAM]
+rocky1

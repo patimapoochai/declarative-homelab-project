@@ -19,11 +19,16 @@ spec:
       - name: {{ .Release.Name }}
         image: {{ .Values.image.repository }}/grafana-oss:{{ .Values.image.tag }}
         ports:
-        - containerPort: 3000
+        - containerPort: 30007
         volumeMounts:
         - mountPath: /var/lib/grafana
           name: grafana-data
+        - mountPath: /usr/share/grafana/conf
+          name: grafana-config
       volumes:
       - name: grafana-data
         persistentVolumeClaim:
           claimName: {{ .Release.Name }}-data
+      - name: grafana-config
+        persistentVolumeClaim:
+          claimName: {{ .Release.Name }}-config

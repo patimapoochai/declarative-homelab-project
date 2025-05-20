@@ -4,3 +4,5 @@ Grafana will be installed to a Rocky Linux host in the `prometheus` group, in ot
 ## Installation
 - Run the `setup-grafana-rocky9.yml` playbook
 
+## Notes
+- Change the chart to mount a directory for config files
