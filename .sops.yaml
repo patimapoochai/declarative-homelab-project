@@ -1,0 +1,11 @@
+keys:
+  - &admin_pat age10532dlzd6nd4g5dh29sfnm330zd9738elujz3zdqhjakvqap4dtq9zwt9w
+  - &server_nixos age1l2ltkpty33ydgsvyzz9fllm29r38pr58wa2vnq4t6kys8g5jkuss63llvr
+creation_rules:
+  - path_regex: sops-secrets/[^/]+\.(yaml|yml|json|env|ini)$
+    key_groups:
+    - age:
+      - *admin_pat
+      - *server_nixos
+
+

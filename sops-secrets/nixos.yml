@@ -1,0 +1,26 @@
+example_key: ENC[AES256_GCM,data:eabiBR1fY1TTPKk7ZA==,iv:Zz4jJ5mJAbtE5ndRxYGOK13bYQxbi+74v0Em3xlo/PA=,tag:NyF5emN6BZW8RTp4OZMdEQ==,type:str]
+ansible_account_pubkey: ENC[AES256_GCM,data:vesk7A==,iv:tRS82XIxgJy2j3Afavcucsd/eZ5jfBkALc22wE1hEJs=,tag:QMwrPmOtYSivbfNBWV2cwA==,type:str]
+sops:
+    age:
+        - recipient: age10532dlzd6nd4g5dh29sfnm330zd9738elujz3zdqhjakvqap4dtq9zwt9w
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBNQnd0SDhoa3h3bG1sMGpU
+            NUJRVzRnQmJkL1JqbzRFRGIxc0hFNlg2ZENnCkdodzZQaHp1T0N4RjJra01XajJi
+            dFNRSzQ3SHgxM0w1QU5aS29DOFI0a1EKLS0tIG5UOE1GOVFyVG1iRkROS2ZLN3Fo
+            dFAzczErYmRYWXc2YU42cUdqb1VmVUkKCSqeE+ctJyGmZzKQgqERnxwM+kpOSvdZ
+            FNrTFXG8gn+U8gytPG99HoXshtERd+CvpHtk0IIYWstcHV9GAbalTQ==
+            -----END AGE ENCRYPTED FILE-----
+        - recipient: age1l2ltkpty33ydgsvyzz9fllm29r38pr58wa2vnq4t6kys8g5jkuss63llvr
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSB3YWZ5Q2R5RzhwTjVFWnFz
+            TU9lV1Vjb2VaSVVaOHp6ZDlVK09kUC90UFhFCkVKREszdHdNazkzbGZHcnZrWDNk
+            Ym5uOGFha0FacTNqSzB4U2N2R2Z5V3cKLS0tIE5JRVhyTHB3K2JJTzVHcjQvV2Rx
+            NTRkQnpFR0NjbFZtSEVSZHZweUxibkUKWBuqt4C6Qz9jr6xrKkt4Ot62oIdlo1wN
+            3ZDCBECObAIuI3tKPuAAjLegoYsMx1xwoP0EuG4XksBvBZZwYpkXvQ==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2025-10-17T08:26:16Z"
+    mac: ENC[AES256_GCM,data:tkQakrVRE4LUGLYQBlrQxa+tQSJp2EtnEBlU8urKl+3RbsS6b0eh1V1Zjq05OfX8690zp7rJptkIqyvd3aKx47dMV9gqFfCzt6ylEDlFRBa0+zLaAWywpd53ZNveHniGFF1G1tT7zp0/dAIosEukRsNC+Hkag48vGLJPM1XMY30=,iv:wK7joxZuaoP9VfMvVvTyK74dJvYCfTjCftmUs9RSiKw=,tag:/MEgkaRy8zRBD6pp02tlbA==,type:str]
+    unencrypted_suffix: _unencrypted
+    version: 3.10.2
