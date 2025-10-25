@@ -12,8 +12,8 @@
     nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
-        ./NixOS/nixos/configuration.nix
-        sops-nix.nixModules.sops
+        ./NixOS/nixos/configuration.nix,
+        sops-nix.nixosModules.sops
       ];
     };
 
