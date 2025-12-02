@@ -8,5 +8,11 @@
   # This is the actual specification of the secrets.
   sops.secrets."nixos/openssh_authorizedkey" = {};
   sops.secrets."nixos/k3s/token" = {};
+  sops.templates."nixos-k3s-token.toml".content = ''
+    password = "${config.sops.placeholder."nixos/k3s/token"}"
+  '';
   sops.secrets."nixos/k3s/serverAddr" = {};
+  sops.templates."nixos-k3s-serverAddr.toml".content = ''
+    password = "${config.sops.placeholder."nixos/k3s/serverAddr"}"
+  '';
 }
