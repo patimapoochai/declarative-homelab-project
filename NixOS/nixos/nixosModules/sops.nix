@@ -1,3 +1,5 @@
+{ config, pkgs, ... }:
+
 {
   sops.defaultSopsFile = ../../../sops-secrets/nixos.yml;
   sops.defaultSopsFormat = "yaml";
