@@ -1,6 +1,7 @@
 keys:
+  # this key is in ~/.config/sops/age/keys.txt btw
   - &admin_pat age10532dlzd6nd4g5dh29sfnm330zd9738elujz3zdqhjakvqap4dtq9zwt9w
-  - &server_nixos age1l2ltkpty33ydgsvyzz9fllm29r38pr58wa2vnq4t6kys8g5jkuss63llvr
+  - &server_nixos age1pspjyy389h9yxsyqjufy4c8gewgalxtg8dvz0q3vvmm4axp039aqzg76av
 creation_rules:
   - path_regex: sops-secrets/[^/]+\.(yaml|yml|json|env|ini)$
     key_groups:
