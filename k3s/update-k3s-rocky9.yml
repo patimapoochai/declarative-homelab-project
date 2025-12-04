@@ -1,0 +1,13 @@
+---
+- name: Install k3s on Rocky Linux 9 Hosts
+  hosts: rocky,&k3s
+  become: true
+  tasks:
+    - name: install script
+      shell: curl -sfL https://get.k3s.io | sh -
+      args:
+        creates: /etc/rancher/k3s/k3s.yaml
+    - name: restart k3s
+      ansible.builtin.service:
+        name: k3s
+        state: restarted
