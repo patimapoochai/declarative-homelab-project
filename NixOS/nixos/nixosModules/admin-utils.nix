@@ -1,8 +1,9 @@
 { config, pkgs, ... }:
 
 {
-  environment.systemPackages = [ 
-    pkgs.neovim
-    pkgs.git
-  ];  
+  environment.systemPackages = with pkgs; [
+    vim
+    git
+    age
+  ];
 }
