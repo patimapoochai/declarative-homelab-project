@@ -10,7 +10,7 @@
   users.users.ansible = {
     isNormalUser = true;
     home = "/home/ansible";
-    openssh.authorizedKeys.keys = [
+    openssh.authorizedKeys.keyFiles = [
       "${config.sops.templates."nixos-openssh-authorizedkey.toml".path}"
       ]; # Add with ansible lineinfile module
   };
