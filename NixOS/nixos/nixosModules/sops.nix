@@ -1,5 +1,5 @@
 {
-  sops.defaultSopsFile = ../../../secrets/nixos.yml;
+  sops.defaultSopsFile = ../../../sops-secrets/nixos.yml;
   sops.defaultSopsFormat = "yaml";
 
   # This will automatically import SSH keys as age keys
