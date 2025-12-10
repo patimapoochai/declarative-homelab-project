@@ -13,5 +13,7 @@
   sops.secrets."nixos/k3s/token" = {};
   sops.templates."nixos-k3s-token.toml".content = "${config.sops.placeholder."nixos/k3s/token"}";
   sops.secrets."nixos/k3s/serverAddr" = {};
-  sops.templates."nixos-k3s-serverAddr.toml".content = "${config.sops.placeholder."nixos/k3s/serverAddr"}";
+  sops.templates."nixos-k3s-env.toml".content = ''
+  K3S_URL=${config.sops.placeholder."nixos/k3s/serverAddr"}
+  '';
 }
