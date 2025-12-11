@@ -8,8 +8,13 @@
   sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
 
   # This is the actual specification of the secrets.
-  sops.secrets."nixos/openssh_authorizedkey" = {};
+  sops.secrets."nixos/openssh_authorizedkey" = {
+    owner = "ansible";
+    mode = "0600";
+    path = "/home/ansible/.ssh/authorized_keys";
+  };
   sops.templates."nixos-openssh-authorizedkey.toml".content = "${config.sops.placeholder."nixos/openssh_authorizedkey"}";
+  
   sops.secrets."nixos/k3s/token" = {};
   sops.templates."nixos-k3s-token.toml".content = "${config.sops.placeholder."nixos/k3s/token"}";
   sops.secrets."nixos/k3s/serverAddr" = {};
