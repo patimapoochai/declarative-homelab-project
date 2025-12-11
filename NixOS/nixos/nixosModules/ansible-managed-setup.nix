@@ -10,9 +10,13 @@
   users.users.ansible = {
     isNormalUser = true;
     home = "/home/ansible";
-    # openssh.authorizedKeys.keyFiles = [
-      # "${config.sops.templates."nixos-openssh-authorizedkey.toml".path}"
-    # ]; # Add with ansible lineinfile module
+  };
+
+  # configure authorized ssh keys for ansiber user
+  sops.secrets."nixos/openssh_authorizedkey" = {
+    owner = "ansible";
+    mode = "0600";
+    path = "/home/ansible/.ssh/authorized_keys";
   };
 
   # set up sudo
