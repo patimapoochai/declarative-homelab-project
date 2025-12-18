@@ -5,5 +5,6 @@
     vim
     git
     age
+    sops
   ];
 }

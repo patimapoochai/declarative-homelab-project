@@ -2,8 +2,8 @@
 
 {
   # make sure python3 is installed
-	environment.systemPackages = [
-    pkgs.python3
+	environment.systemPackages = with pkgs; [
+    python3
   ];
 
   # create "ansible" user
