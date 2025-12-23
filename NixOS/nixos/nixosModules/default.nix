@@ -7,5 +7,6 @@
     ./prometheus-node-exporter.nix
     ./admin-utils.nix
     ./sops.nix
+    ./docker.nix
   ];
 }
