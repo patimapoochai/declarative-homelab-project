@@ -5,7 +5,7 @@
     vim
     git
     age
-    sop
+    sops
     tmux
   ];
 }
